@@ -1,13 +1,8 @@
-"""
-Madlibs project Goals
-1. User input prompt
-    a. verify it is a word.
-2. Multiple inserts for verbs, adjatives, nouns
-3. Random sentence selection
-"""
+# Basic Madlib project
 
+#help functions
 def getVerb():
-    return input("Enter Verb: ")
+    return input("Enter past tense verb: ")
 
 def getAdj():
     return input("Enter Adjective: ")
@@ -18,14 +13,18 @@ def getNoun():
 def getColor():
     return input("Enter Color: ")
 
+def getDirection():
+    return input("Enter a direction: ")
+#main
+def main():
+    print("Lets play MadLibs!")
+    noun1 = getNoun()
+    verb = getVerb()
+    adj1 = getAdj()
+    noun2 = getNoun()
+    adj2 = getAdj()
+    direction = getDirection()
 
-noun1 = getNoun()
-verb = getVerb()
-adj1 = getAdj()
-noun2 = getNoun()
-adj2 = getAdj()
+    print("The " + adj1 + " " + adj2 + " " + noun1 + " " + verb + " " + direction +" the " + noun2 + "." )
 
-"""The little red rabbit ran over the river"""
-
-print("The " + adj1 + " " + adj2 + " " + noun1 + " " + verb + " over the " + noun2 + "." )
-
+main()
