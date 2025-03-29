@@ -1,10 +1,3 @@
-# Tasks
-# [] Split item into 3 parts: int1, int2, and symbol
-# [] Determine length of longer number
-# [] Determine if + or -
-
-
-
 def sizeMatch(number, length):
     sizeDifference = length - len(number)
     result = ''
@@ -24,6 +17,7 @@ def arithmetic_arranger(problems, show_answers=False):
         parts = equation.split()
         line = ''
         answer = ''
+
 #Error tests: 1 - Numbers only contain digits, 2: Numbers 4 digits or less, 3: operator is + or -
         if not (parts[1] == '+' or parts[1] == '-'):
             raise ValueError("Error: Operator must be '+' or '-'.")
@@ -43,9 +37,6 @@ def arithmetic_arranger(problems, show_answers=False):
         parts[0] = '  ' + sizeMatch(parts[0], longer) + '    '
         parts[2] = parts[1]+ ' ' + sizeMatch(parts[2], longer) + '    '
 
-        
-        
-
         if show_answers:
             answer = str(answer)
             newLonger = max(len(parts[0]) - 4,len(parts[0]) - 4, len(answer))
@@ -59,17 +50,14 @@ def arithmetic_arranger(problems, show_answers=False):
         firstNum.append(parts[0])
         secondNum.append(parts[2])
         lineDraw.append(line + '    ')
-        
             
-        
+# Figure out how to make it print correctly
+    problems = ''.join(firstNum).removesuffix('    ') + '\n'
+    problems += ''.join(secondNum).removesuffix('    ') + '\n'
+    problems += ''.join(lineDraw).removesuffix('    ')
 
-
-    print(firstNum)
-    print(secondNum)
-    print(lineDraw)
-    print(result)
+    if show_answers:
+        problems += '\n'+''.join(result)
     return problems
 
-
-print(f'\n{arithmetic_arranger(["9932 + 9"], True)}')
-# print(f'\n{arithmetic_arranger(["32 + 698", "3801 - 2", "45 + 43", "123 + 49"])}')
+print(f'\n{arithmetic_arranger(["3801 - 2", "123 + 49"],)}')
