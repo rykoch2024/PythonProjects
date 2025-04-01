@@ -1,10 +1,4 @@
-# [] Break start into hour, minute and day part
-# [] Break duration into hour, minute
-# [] handle multiple days
-
-
-
-def add_time(start, duration):
+def add_time(start, duration, day_of_week = ''):
     day_part = ''
     new_time = ''
     final_day_part = ''
@@ -15,7 +9,8 @@ def add_time(start, duration):
     combine_Time = []
     day_split = []
     start_time = []
-
+    weekday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    current_weekday = ''
 
     day_split = start.split()
     day_part = day_split.pop()
@@ -51,10 +46,27 @@ def add_time(start, duration):
     elif total_days > 1:
         day_change = ' (' + str(total_days) + ' days later)'
 
-    new_time = f'{combine_Time[0]}:{combine_Time[1]:02d} {final_day_part}{day_change}'
+
+    if not day_of_week == '':
+        weekday_counter = 0
+        for i in range(len(weekday)):
+            if weekday[i].lower() == day_of_week.lower():
+                weekday_counter = i
+                break
+        weekday_counter += total_days
+        weekday_counter = weekday_counter % 7
+        current_weekday = ', ' + weekday[weekday_counter]
+
+    
+
+
+
+    new_time = f'{combine_Time[0]}:{combine_Time[1]:02d} {final_day_part}{current_weekday}{day_change}'
     return new_time
 
 print(add_time('3:30 PM', '2:12'))
 print(add_time('11:55 AM', '3:12'))
 print(add_time('2:59 AM', '24:00'))
 print(add_time('11:59 PM', '24:05'))
+print(add_time('3:30 PM', '2:12', 'Monday'))
+print(add_time('8:16 PM', '466:02', 'tuesday'))
