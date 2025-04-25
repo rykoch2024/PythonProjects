@@ -23,7 +23,18 @@ class Category:
         #Item List
         for item in self.ledger:
             line = ''
-            line += f'{item['description']:<23}'
+            lineDesc = item.get('description')
+            lineAmount = f"{item.get('amount'):.2f}"
+            if len(lineDesc) >= 23:
+                FinalDesc = lineDesc[:23]
+            else:
+                FinalDesc = lineDesc
+                while len(FinalDesc) < 23:
+                    FinalDesc += ' '
+            if len(lineAmount) < 7:
+                lineAmount = ' ' + lineAmount
+
+            line += FinalDesc + lineAmount
             line += '\n'
 
             printOut += line
@@ -69,3 +80,5 @@ food = Category('food')
 food.deposit(900, 'deposit')
 food.withdraw(45.67, 'milk, cereal, eggs, bacon, bread')
 print(food)
+
+
