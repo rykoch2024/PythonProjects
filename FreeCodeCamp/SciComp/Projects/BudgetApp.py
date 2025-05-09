@@ -80,15 +80,19 @@ class Category:
 
 
 
+# Problems are here
 
-
-def create_spend_chart(categories):
+def create_spend_chart(categories=Category):
+    localCal = categories
     dispGraph = {}
     returnString = ''
     title = 'Percentage spent by category'
     totalWithdraws = 0
+    withdrawItem = 0
     withdrawList = []
-    
+
+    returnString += title + '\n'
+
     #init graph generation
     i = 100
     while i >= 0:
@@ -103,20 +107,21 @@ def create_spend_chart(categories):
         dispGraph.update({key:[graph]})
         dispGraph.update({'final': '    '})
 
-    #calculate total withdraws
-    for item in categories.ledger:
-        if item.get('amount') < 0:
-            item['amount'] = item.get('amount') * -1
-            withdrawList.append(item)
-            totalWithdraws += item.get('amount')
-    
-    #calculate percentages
+
+    #Verify ledger Exists (stops several test errors)
+    if hasattr(localCal, "ledger"):
+        for item in localCal.ledger:
+            if item.get('amount') < 0:
+                item['amount'] = item.get('amount') * -1
+                withdrawList.append(item)
+                totalWithdraws += item.get('amount')
+    else:
+        returnString += 'no ledger'
+
     for item in withdrawList:
         percentage = int(round(item['amount'] / totalWithdraws, 1) * 100)
         item.update({'percentage': percentage})
 
-    #Graph Fill
-    withdrawItem = 0
     while withdrawItem < len(withdrawList):
         addMarker = withdrawList[withdrawItem]['percentage']
         currKey = 0
@@ -138,35 +143,27 @@ def create_spend_chart(categories):
         dispGraph['final'] = temp
         withdrawItem += 1
     
-    
-    #print(dispGraph)
-
-
-    #Display Creation
-    returnString += title
-
     for key, value in dispGraph.items():
-        if key != 'final':
+        if key is not 'final':
             for i in value:
                 returnString += i
             returnString += '\n'
     for key, value in dispGraph.items():
-        if key == 'final':
+        if key is 'final':
             for i in value:
                 returnString += i
-            returnString += '-\n'
+            returnString += '-\n'    
     
-    return title + '\n'
-    #return ''
+    return returnString
 
 
 food = Category('food')
 food.deposit(900, 'deposit')
 food.withdraw(10.10, 'milk, cereal, eggs, bacon, bread')
-food.withdraw(20.20, 'bacon')
-food.withdraw(50.50, 'eggs')
-food.withdraw(80.80, 'cereal')
-food.withdraw(90.90, 'milk')
+food.withdraw(20.20, 'taco')
+food.withdraw(50.50, 'pasta')
+food.withdraw(80.80, 'spaghetti')
+food.withdraw(90.90, 'cherry')
 #print(food)
 
 print(create_spend_chart(food))
