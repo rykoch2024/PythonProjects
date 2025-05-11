@@ -97,30 +97,37 @@ def create_spend_chart(categories=Category):
     i = 100
     while i >= 0:
         key = str(i)
-        if i == 100:
-            graph = str(i) + '|'
-        elif i == 0:
-            graph = '  ' + str(i) + '|'
-        else:
-            graph = ' ' + str(i) + '|'
+        graph = [f'{i:>3}| ']
         i -= 10
-        dispGraph.update({key:[graph]})
-        dispGraph.update({'final': '    '})
+        dispGraph.update({key:graph})
+    dispGraph.update({'final': f"{'':4}-"})
 
 
-    #Verify ledger Exists (stops several test errors)
+    for item in dispGraph.values():
+        returnString += item[0] + '\n'
+
+
+    #FUCK THE LEDGER!! THIS SHIT IS BREAKING STUFF IT HAS NO RIGHT BREAKING!!
+    
     if hasattr(localCal, "ledger"):
-        for item in localCal.ledger:
-            if item.get('amount') < 0:
-                item['amount'] = item.get('amount') * -1
-                withdrawList.append(item)
-                totalWithdraws += item.get('amount')
+        pass
+#        for item in localCal.ledger:
+#            if item.get('amount') < 0:
+#                item['amount'] = item.get('amount') * -1
+#                withdrawList.append(item)
+#                totalWithdraws += item.get('amount')
     else:
         returnString += 'no ledger'
 
+
+        #calculate percentages & add to graph
     for item in withdrawList:
-        percentage = int(round(item['amount'] / totalWithdraws, 1) * 100)
-        item.update({'percentage': percentage})
+        if totalWithdraws > 0:
+            percentage = int(round(item['amount'] / totalWithdraws, 1) * 100)
+            item.update({'percentage': percentage})
+
+    
+        withdrawItem = 0
 
     while withdrawItem < len(withdrawList):
         addMarker = withdrawList[withdrawItem]['percentage']
@@ -128,9 +135,9 @@ def create_spend_chart(categories=Category):
         while currKey <= 100:
             newMark = ''
             if currKey <= addMarker:
-                newMark = ' o '
+                newMark += f"{'0':<3}"
             else:
-                newMark = '   '
+                newMark += f"{'':3}"
             
             temp = dispGraph[str(currKey)]
             temp.append(newMark)
@@ -142,17 +149,6 @@ def create_spend_chart(categories=Category):
         temp += '---'
         dispGraph['final'] = temp
         withdrawItem += 1
-    
-    for key, value in dispGraph.items():
-        if key is not 'final':
-            for i in value:
-                returnString += i
-            returnString += '\n'
-    for key, value in dispGraph.items():
-        if key is 'final':
-            for i in value:
-                returnString += i
-            returnString += '-\n'    
     
     return returnString
 
